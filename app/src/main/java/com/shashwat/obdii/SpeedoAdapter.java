@@ -155,11 +155,11 @@ public class SpeedoAdapter extends PagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch (position) {
             case 0:
-                return "  Revs  ";
+                return "Revs";
             case 1:
-                return "  Speed  ";
+                return "Speed";
             case 2:
-                return "  Throttle  ";
+                return "Throttle";
         }
         return super.getPageTitle(position);
     }
