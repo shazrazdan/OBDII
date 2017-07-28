@@ -20,6 +20,8 @@ public class FirstActivity extends AppCompatActivity {
 
     Integer[] initialValues = {1,1,1};
     SpeedoAdapter speedoAdapter;
+    PagerBullet viewPager;
+
 
 
     @Override
@@ -37,13 +39,12 @@ public class FirstActivity extends AppCompatActivity {
                 initialValues[value%3]=value;
                 Log.e("initialValues: ", initialValues[0] + ", " + initialValues[1] + ", " + initialValues[2]);
 
-                speedoAdapter.notifyPrimaryChanged(0,value);
+                speedoAdapter.notifyPrimaryChanged(viewPager.getViewPager().getCurrentItem(),value);
             }
         });
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 
-        PagerBullet viewPager = (PagerBullet) findViewById(R.id.pagerBullet);
-
+        viewPager = (PagerBullet) findViewById(R.id.pagerBullet);
 
 
         speedoAdapter = new SpeedoAdapter(this, 3, initialValues);
