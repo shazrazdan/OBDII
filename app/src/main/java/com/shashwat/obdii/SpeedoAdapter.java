@@ -88,26 +88,18 @@ public class SpeedoAdapter extends PagerAdapter {
     }
 
 
-
-
     class alpha{
         SeriesItem seriesItem1;
         int series1Index;
-        SeriesItem seriesItem2;
-        int series2Index;
         SeriesItem seriesItem3;
         int series3Index;
         DecoView arcView;
 
+
         private void CreateDecoView(int position) {
 
-            if (position==1) {
-                arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-            } else if (position==2) {
-                arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-            } else if (position==0) {
-                arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-            }
+            arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
+
 
 // Create background track
             /*arcView.addSeries(new SeriesItem.Builder(Color.argb(255, 218, 218, 218))
@@ -145,24 +137,22 @@ public class SpeedoAdapter extends PagerAdapter {
 
             arcView.addEvent(new DecoEvent.Builder(DecoEvent.EventType.EVENT_SHOW, true)
                     .setDelay(00)
-                    .setDuration(500)
+                    .setDuration(50)
                     .build());
 
-            if (position==1) {
+            int i = (int) (Math.random()*3.0);
+            if (position==0) {
 
-                arcView.addEvent(new DecoEvent.Builder(30*360/100).setIndex(series3Index).setColor(colorArrayCorrect[position]).setDelay(000).build());
-                arcView.addEvent(new DecoEvent.Builder(60*360/100).setIndex(series2Index).setColor(colorArrayAttempted[position]).setDelay(000).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(colorArrayTotal[position]).setDelay(000).build());
+                arcView.addEvent(new DecoEvent.Builder(30*360/100).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(500).build());
+                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
+            } else if(position==1){
+
+                arcView.addEvent(new DecoEvent.Builder(40*360/100).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
+                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
             } else if(position==2){
 
-                arcView.addEvent(new DecoEvent.Builder(40*360/100).setIndex(series3Index).setColor(colorArrayCorrect[position]).setDelay(000).build());
-                arcView.addEvent(new DecoEvent.Builder(50*360/100).setIndex(series2Index).setColor(colorArrayAttempted[position]).setDelay(000).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(colorArrayTotal[position]).setDelay(000).build());
-            } else if(position==0){
-
-                arcView.addEvent(new DecoEvent.Builder(80*360/100).setIndex(series3Index).setColor(colorArrayCorrect[0]).setDelay(000).build());
-                arcView.addEvent(new DecoEvent.Builder(90*360/100).setIndex(series2Index).setColor(colorArrayAttempted[1]).setDelay(000).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(colorArrayTotal[2]).setDelay(000).build());
+                arcView.addEvent(new DecoEvent.Builder(80*360/100).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
+                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
             }
 
 
