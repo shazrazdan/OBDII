@@ -10,6 +10,8 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.ogaclejapan.smarttablayout.SmartTabLayout;
+
 public class FirstActivity extends AppCompatActivity {
 
     @Override
@@ -27,10 +29,16 @@ public class FirstActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+        SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
 
-        PagerBullet pagerBullet = (PagerBullet) findViewById(R.id.pagerBullet);
-        ViewPager pager = (ViewPager) findViewById(R.id.viewPagerBullet);
+        PagerBullet viewPager = (PagerBullet) findViewById(R.id.pagerBullet);
 
+        SpeedoAdapter speedoAdapter = new SpeedoAdapter(this, 3);
+        viewPager.setAdapter(speedoAdapter);
+        viewPager.getViewPager().setOffscreenPageLimit(3);
+        viewPagerTab.setDistributeEvenly(false);
+
+        viewPagerTab.setViewPager(viewPager.getViewPager());
 
     }
 
