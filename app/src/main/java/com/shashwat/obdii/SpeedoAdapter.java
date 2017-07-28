@@ -172,7 +172,7 @@ public class SpeedoAdapter extends PagerAdapter {
 
         View layout = views.get(pos);
         DecoView arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-        arcView.addEvent(new DecoEvent.Builder(value).setIndex(series3Index).setColor(colorArrayCorrect[pos]).setDelay(000).setDuration(200).build());
+        arcView.addEvent(new DecoEvent.Builder(value).setIndex(series3Index).setColor(colorArrayCorrect[value/121]).setDelay(000).setDuration(200).build());
 
 
 
