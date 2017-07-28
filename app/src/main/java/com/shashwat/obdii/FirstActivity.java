@@ -2,6 +2,7 @@ package com.shashwat.obdii;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -17,6 +18,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
+import com.github.pires.obd.commands.protocol.EchoOffCommand;
+import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
+import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
+import com.github.pires.obd.commands.protocol.TimeoutCommand;
+import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
+import com.github.pires.obd.enums.ObdProtocols;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.util.ArrayList;
@@ -30,7 +37,7 @@ public class FirstActivity extends AppCompatActivity {
     Integer[] initialValues = {1,1,1};
     SpeedoAdapter speedoAdapter;
     PagerBullet viewPager;
-
+    String TAG = "FirstActivity";
     ArrayList deviceStrs = new ArrayList();
     final ArrayList devices = new ArrayList();
 
@@ -74,12 +81,33 @@ public class FirstActivity extends AppCompatActivity {
                         String deviceAddress = devices.get(position).toString();
                         Log.e("Chose", deviceAddress);
                         // Calling an AsyncTask here.
+                        ConnectDeviceAsyncTask connectDeviceAsyncTask = new ConnectDeviceAsyncTask();
+                        connectDeviceAsyncTask.execute(deviceAddress);
+                        connectDeviceAsyncTask.SocketConnectedListener(new SocketConnectedListener() {
+                            @Override
+                            public void onSocketConnectionComplete(BluetoothSocket socket) {
+                                try {
+                                    new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
+                                    new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
+                                    new TimeoutCommand(125).run(socket.getInputStream(), socket.getOutputStream());
+                                    new SelectProtocolCommand(ObdProtocols.AUTO).run(socket.getInputStream(), socket.getOutputStream());
+                                    new AmbientAirTemperatureCommand().run(socket.getInputStream(), socket.getOutputStream());
+                                } catch (Exception e) {
+                                    // handle errors
+                                    Log.e(TAG, "Command execution error");
+                                }
+                            }
+                        });
                     }
                 });
 
                 alertDialog.setTitle("Choose Bluetooth device");
                 alertDialog.show();
+
+
                 //speedoAdapter.notifyPrimaryChanged(viewPager.getViewPager().getCurrentItem(),value);
+
+
             }
         });
         SmartTabLayout viewPagerTab = (SmartTabLayout) findViewById(R.id.viewpagertab);
