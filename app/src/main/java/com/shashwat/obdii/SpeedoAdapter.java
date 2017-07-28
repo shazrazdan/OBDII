@@ -5,29 +5,20 @@ package com.shashwat.obdii;
  */
 
 import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.view.PagerAdapter;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.util.SparseArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.view.animation.BounceInterpolator;
-import android.view.animation.ScaleAnimation;
-import android.widget.TextView;
 
 import com.hookedonplay.decoviewlib.DecoView;
+import com.hookedonplay.decoviewlib.charts.DecoDrawEffect;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
 
-import org.json.JSONObject;
-
-import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -36,25 +27,29 @@ import java.util.HashMap;
 public class SpeedoAdapter extends PagerAdapter {
     Handler handler;
     int count;
-
-
+    SeriesItem seriesItem1;
+    int secondaryArc;
+    SeriesItem primaryArc;
+    int series3Index;
+    DecoView arcView;
+    SparseArray<View> views = new SparseArray<View>();
 
     // Common
     Context context;
     ViewGroup layout;
+    Integer[] initialValues;
 
 
 
 
     Integer[] colorArrayTotal = {0xFFC8E6C9, 0xFFFFF9C4, 0xFFFFCCBC};
-    Integer[] colorArrayAttempted = {0xFF66BB6A, 0xFFFFEE58, 0xFFFF7043};
     Integer[] colorArrayCorrect = {0xFF1B5E20, 0xFFFDD835, 0xFFBF360C};
 
-    public static HashMap<String, Bundle> graphData;
 
-    public SpeedoAdapter(Context ctx, int count) {
+    public SpeedoAdapter(Context ctx, int count, Integer[] initialValues) {
         context = ctx;
         this.count=count;
+        this.initialValues = initialValues;
 
     }
 
@@ -62,78 +57,44 @@ public class SpeedoAdapter extends PagerAdapter {
     public Object instantiateItem(ViewGroup container, final int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        layout = (ViewGroup) inflater.inflate(R.layout.layout_deco,
-                container, false);
+        if (container.getTag()==null) {
+            layout = (ViewGroup) inflater.inflate(R.layout.layout_deco,
+                    container, false);
 
-        handler = new Handler();
-        if (position == 0) {
+            CreateDecoView(position);
 
-            alpha a = new alpha();
-            a.CreateDecoView(position);
-
-
-        }else if (position == 1) {
-
-            alpha b = new alpha();
-            b.CreateDecoView(position);
-
-
-        } else if (position == 2) {
-            alpha b = new alpha();
-            b.CreateDecoView(position);
+            container.addView(layout);
+            views.put(position,layout);
+        } else {
         }
-        container.addView(layout);
         return layout;
 
     }
 
 
-    class alpha{
-        SeriesItem seriesItem1;
-        int series1Index;
-        SeriesItem seriesItem3;
-        int series3Index;
-        DecoView arcView;
-
-
-        private void CreateDecoView(int position) {
+    private void CreateDecoView(int position) {
 
             arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
 
 
-// Create background track
-            /*arcView.addSeries(new SeriesItem.Builder(Color.argb(255, 218, 218, 218))
-                    .setRange(0, 360, 360)
-                    .setInitialVisibility(false)
-                    .setLineWidth(0f)
-                    .build());*/
+            arcView.configureAngles(270, 0);
 
-//Create data series track
             seriesItem1 = new SeriesItem.Builder(colorArrayTotal[0])
-                    .setRange(0, 360, 0)
+                    .setRange(0, 360, 360)
                     .setInterpolator(new AccelerateDecelerateInterpolator())
                     .setLineWidth(32f)
                     .build();
 
-            series1Index = arcView.addSeries(seriesItem1);
-/*
-            seriesItem2 = new SeriesItem.Builder(colorArrayAttempted[0])
-                    .setRange(0, 360, 0)
-                    .setLineWidth(0f)
-                    .setInterpolator(new AccelerateDecelerateInterpolator())
-                    .setCapRounded(true)
-                    .build();
+            secondaryArc = arcView.addSeries(seriesItem1);
 
-            series2Index = arcView.addSeries(seriesItem2);
-*/
 
-            seriesItem3 = new SeriesItem.Builder(colorArrayCorrect[0])
+            primaryArc = new SeriesItem.Builder(colorArrayCorrect[0])
                     .setRange(0, 360, 0)
                     .setLineWidth(60f)
                     .setInterpolator(new AccelerateDecelerateInterpolator())
                     .build();
 
-            series3Index = arcView.addSeries(seriesItem3);
+            series3Index = arcView.addSeries(primaryArc);
 
             arcView.addEvent(new DecoEvent.Builder(DecoEvent.EventType.EVENT_SHOW, true)
                     .setDelay(00)
@@ -141,28 +102,42 @@ public class SpeedoAdapter extends PagerAdapter {
                     .build());
 
             int i = (int) (Math.random()*3.0);
+
+            arcView.addEvent(new DecoEvent.Builder(initialValues[position]).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(500).build());
+            //arcView.addEvent(new DecoEvent.Builder(360).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
+
+/*
+
             if (position==0) {
 
-                arcView.addEvent(new DecoEvent.Builder(30*360/100).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(500).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
+                arcView.addEvent(new DecoEvent.Builder(initialValues[position]).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(500).build());
+                arcView.addEvent(new DecoEvent.Builder(360).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
             } else if(position==1){
 
-                arcView.addEvent(new DecoEvent.Builder(40*360/100).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
+                arcView.addEvent(new DecoEvent.Builder(initialValues[position]/360f).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
+                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
             } else if(position==2){
 
-                arcView.addEvent(new DecoEvent.Builder(80*360/100).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(series1Index).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
+                arcView.addEvent(new DecoEvent.Builder(initialValues[position]/360f).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
+                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
             }
+*/
 
 
-            arcView.configureAngles(270, 0);
 
 
         }
 
+        void updatePrimaryArc(int value){
+            arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
+            arcView.addEvent(new DecoEvent.Builder(30*360/100).setIndex(value).setColor(colorArrayCorrect[(value/180)]).setDelay(000).setDuration(500).build());
 
-    }
+        }
+
+
+
+
+
 
     @Override
     public int getCount() {
@@ -193,5 +168,15 @@ public class SpeedoAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+    public void notifyPrimaryChanged(int pos, int value) {
+
+        View layout = views.get(pos);
+        DecoView arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
+        arcView.addEvent(new DecoEvent.Builder(value).setIndex(series3Index).setColor(colorArrayCorrect[pos]).setDelay(000).setDuration(200).build());
+
+
+
+        notifyDataSetChanged();
+    }
 }
 
