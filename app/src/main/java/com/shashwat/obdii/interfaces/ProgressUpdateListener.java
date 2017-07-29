@@ -1,4 +1,4 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.interfaces;
 
 /**
  * Created by Shashwat on 29/07/17.

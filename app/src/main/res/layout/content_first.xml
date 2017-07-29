@@ -5,10 +5,10 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="com.shashwat.obdii.FirstActivity"
+    tools:context="com.shashwat.obdii.activity.FirstActivity"
     tools:showIn="@layout/activity_first">
 
-    <com.shashwat.obdii.PagerBullet
+    <com.shashwat.obdii.Helper.PagerBullet
         android:id="@+id/pagerBullet"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

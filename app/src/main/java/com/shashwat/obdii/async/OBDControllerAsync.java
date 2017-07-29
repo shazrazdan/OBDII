@@ -1,6 +1,10 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.async;
 
 import android.os.AsyncTask;
+
+import com.shashwat.obdii.Helper.OBDController;
+import com.shashwat.obdii.activity.AlternateActivity;
+import com.shashwat.obdii.interfaces.ProgressUpdateListener;
 
 /**
  * Created by Shashwat on 29/07/17.

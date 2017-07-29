@@ -1,6 +1,14 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.Helper;
 
+import android.Manifest;
 import android.bluetooth.BluetoothSocket;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.util.Log;
 
 import java.io.IOException;
@@ -11,14 +19,15 @@ import java.util.ArrayList;
  * Created by Shashwat on 28/07/17.
  */
 
-public class OBDController {
+public class OBDController{
 
 
     static ArrayList<Integer> buffer = new ArrayList<>();
     static StringBuffer sb = new StringBuffer();
     static BluetoothSocket socket = null;
 
-    public static void setSocket(BluetoothSocket sock){
+    public static void setSocket(BluetoothSocket sock, Context ctx) {
+
         socket = sock;
     }
 
@@ -28,7 +37,7 @@ public class OBDController {
             socket.getOutputStream().write((cmd + "\r").getBytes());
             socket.getOutputStream().flush();
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return receiveResult(socket);
@@ -94,8 +103,7 @@ public class OBDController {
         }catch (Exception e){
             e.printStackTrace();
         }
-        return  responseInt/4;
+        return  responseInt;
     }
-
 
 }

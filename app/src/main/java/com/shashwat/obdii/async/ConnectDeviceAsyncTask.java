@@ -1,10 +1,12 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.async;
 
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.os.AsyncTask;
 import android.util.Log;
+
+import com.shashwat.obdii.interfaces.SocketConnectedListener;
 
 import java.util.UUID;
 
@@ -17,7 +19,7 @@ public class ConnectDeviceAsyncTask extends AsyncTask<String, String, BluetoothS
     SocketConnectedListener socketConnectedListener;
     String TAG = "ConnectDeviceAsyncTask";
 
-    ConnectDeviceAsyncTask(){
+    public ConnectDeviceAsyncTask(){
 
     }
 

@@ -1,4 +1,4 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.adapters;
 
 /**
  * Created by Shashwat on 27/07/17.
@@ -18,6 +18,7 @@ import com.hookedonplay.decoviewlib.DecoView;
 import com.hookedonplay.decoviewlib.charts.DecoDrawEffect;
 import com.hookedonplay.decoviewlib.charts.SeriesItem;
 import com.hookedonplay.decoviewlib.events.DecoEvent;
+import com.shashwat.obdii.R;
 
 import java.util.HashMap;
 
@@ -148,7 +149,7 @@ public class SpeedoAdapter extends PagerAdapter {
 
         View layout = views.get(pos);
         DecoView arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-        arcView.addEvent(new DecoEvent.Builder(value*360/8000).setIndex(series3Index).setColor(colorArrayCorrect[(value/3000)]).setDelay(000).setDuration(500).build());
+        arcView.addEvent(new DecoEvent.Builder(value*360/300).setIndex(series3Index).setColor(colorArrayCorrect[(value/100)]).setDelay(000).setDuration(300).build());
 
 
 

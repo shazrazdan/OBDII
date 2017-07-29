@@ -1,4 +1,4 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.activity;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,7 +13,9 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ScrollView;
 import android.widget.TextView;
-import android.widget.Toast;
+
+import com.shashwat.obdii.async.OBDControllerAsync;
+import com.shashwat.obdii.R;
 
 public class AlternateActivity extends AppCompatActivity {
 

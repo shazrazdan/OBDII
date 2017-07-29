@@ -1,4 +1,4 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.interfaces;
 
 import android.bluetooth.BluetoothSocket;
 

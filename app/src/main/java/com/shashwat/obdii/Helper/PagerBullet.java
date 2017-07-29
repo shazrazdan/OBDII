@@ -1,4 +1,4 @@
-package com.shashwat.obdii;
+package com.shashwat.obdii.Helper;
 
 /**
  * Created by Shashwat on 30/06/2016.
@@ -19,6 +19,8 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.shashwat.obdii.R;
 
 /**
  * Created by Shashwat on 30/06/16.
