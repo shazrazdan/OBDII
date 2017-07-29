@@ -21,7 +21,7 @@ public class ConnectDeviceAsyncTask extends AsyncTask<String, String, BluetoothS
 
     }
 
-    public void SocketConnectedListener(SocketConnectedListener socketConnectedListener) {
+    public void setOnSocketConnectedListener(SocketConnectedListener socketConnectedListener) {
         this.socketConnectedListener = socketConnectedListener;
     }
 

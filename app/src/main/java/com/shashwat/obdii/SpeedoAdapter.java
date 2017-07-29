@@ -106,25 +106,6 @@ public class SpeedoAdapter extends PagerAdapter {
             arcView.addEvent(new DecoEvent.Builder(initialValues[position]).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(200).build());
             //arcView.addEvent(new DecoEvent.Builder(360).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
 
-/*
-
-            if (position==0) {
-
-                arcView.addEvent(new DecoEvent.Builder(initialValues[position]).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(500).build());
-                arcView.addEvent(new DecoEvent.Builder(360).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
-            } else if(position==1){
-
-                arcView.addEvent(new DecoEvent.Builder(initialValues[position]/360f).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
-            } else if(position==2){
-
-                arcView.addEvent(new DecoEvent.Builder(initialValues[position]/360f).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(50).build());
-                arcView.addEvent(new DecoEvent.Builder(100*360/100).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(50).build());
-            }
-*/
-
-
-
 
         }
 
@@ -167,7 +148,7 @@ public class SpeedoAdapter extends PagerAdapter {
 
         View layout = views.get(pos);
         DecoView arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-        arcView.addEvent(new DecoEvent.Builder(value*360/10000).setIndex(series3Index).setColor(colorArrayCorrect[(value/121)%3]).setDelay(000).setDuration(200).build());
+        arcView.addEvent(new DecoEvent.Builder(value*360/8000).setIndex(series3Index).setColor(colorArrayCorrect[(value/3000)]).setDelay(000).setDuration(500).build());
 
 
 

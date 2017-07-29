@@ -6,10 +6,7 @@ import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -19,22 +16,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
-import com.github.pires.obd.commands.protocol.EchoOffCommand;
-import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
-import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
-import com.github.pires.obd.commands.protocol.TimeoutCommand;
-import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
-import com.github.pires.obd.enums.ObdProtocols;
-import com.github.pires.obd.exceptions.NonNumericResponseException;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
-
-import static android.support.v4.view.PagerAdapter.POSITION_NONE;
 
 public class FirstActivity extends AppCompatActivity {
 
@@ -89,19 +75,25 @@ public class FirstActivity extends AppCompatActivity {
                         // Calling an AsyncTask here.
                         ConnectDeviceAsyncTask connectDeviceAsyncTask = new ConnectDeviceAsyncTask();
                         connectDeviceAsyncTask.execute(deviceAddress);
-                        connectDeviceAsyncTask.SocketConnectedListener(new SocketConnectedListener() {
+                        connectDeviceAsyncTask.setOnSocketConnectedListener(new SocketConnectedListener() {
                             @Override
                             public void onSocketConnectionComplete(BluetoothSocket socket) {
 
-                                //OBDController.sendCommand(socket,"AT SP 0");
-
-                                for (int i=0;i<0;i++) {
-                                    speedoAdapter.notifyPrimaryChanged(0,OBDController.sendCommand("010C"));
+                                OBDController.setSocket(socket);
+                                try {
+                                    OBDController.sendCommand("AT SP 0");
+                                } catch (Exception e) {
+                                    e.printStackTrace();
                                 }
 
-                                OBDController.setSocket(socket);
-                                Intent i = new Intent(FirstActivity.this, AlternateActivity.class);
-                                startActivity(i);
+                                OBDControllerAsync as = new OBDControllerAsync();
+                                as.execute("010C");
+                                as.setOnProgressUpdateListener(new ProgressUpdateListener() {
+                                    @Override
+                                    public void onProgressUpdate(int value) {
+                                        speedoAdapter.notifyPrimaryChanged(viewPager.getViewPager().getCurrentItem(),value);
+                                    }
+                                });
 
                             }
                         });
@@ -147,7 +139,9 @@ public class FirstActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_log) {
+            Intent i = new Intent(FirstActivity.this, AlternateActivity.class);
+            startActivity(i);
             return true;
         }
 

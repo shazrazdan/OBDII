@@ -20,6 +20,7 @@ public class AlternateActivity extends AppCompatActivity {
     private static TextView logBox;
     private static ScrollView scrollView;
     static boolean refresh = true;
+    boolean execute = true;
 
 
     @Override
@@ -33,7 +34,7 @@ public class AlternateActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(final View view) {
-
+                execute = true;
                 try{
                     InputMethodManager inputManager = (InputMethodManager)
                             getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -49,12 +50,12 @@ public class AlternateActivity extends AppCompatActivity {
                 EditText input = (EditText) findViewById(R.id.editText);
                 String val = input.getText().toString();
                 if(val.length()==0) {
-                    AddLog("No input provided", "Using default");
-                    val = "default";
+                    AddLog("No input provided", "Using default as RPM");
+                    val = "010C";
                 }
 
-                AddLog("Execute:  ", val);
-                AddLog("Response: ", String.valueOf(OBDController.sendCommand(val)));
+                OBDControllerAsync as = new OBDControllerAsync();
+                as.execute(val);
 
 
             }
@@ -92,6 +93,9 @@ public class AlternateActivity extends AppCompatActivity {
                 item.setTitle("Refresh Mode");
             refresh=!refresh;
             return true;
+        } else if(id == R.id.action_stop){
+            execute = false;
+            Log.e("Pressed ", "Stop");
         }
 
         return super.onOptionsItemSelected(item);
