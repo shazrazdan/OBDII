@@ -54,19 +54,19 @@ public class SpeedoAdapter extends PagerAdapter {
     }
 
     @Override
-    public Object instantiateItem(ViewGroup container, final int position) {
+    public Object instantiateItem(ViewGroup container, int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
 
-        if (container.getTag()==null) {
+        if (position<4) {
             layout = (ViewGroup) inflater.inflate(R.layout.layout_deco,
                     container, false);
-
             CreateDecoView(position);
-
-            container.addView(layout);
-            views.put(position,layout);
         } else {
+
         }
+        container.addView(layout);
+        views.put(position,layout);
+
         return layout;
 
     }
@@ -103,7 +103,7 @@ public class SpeedoAdapter extends PagerAdapter {
 
             int i = (int) (Math.random()*3.0);
 
-            arcView.addEvent(new DecoEvent.Builder(initialValues[position]).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(500).build());
+            arcView.addEvent(new DecoEvent.Builder(initialValues[position]).setIndex(series3Index).setColor(colorArrayCorrect[i]).setDelay(000).setDuration(200).build());
             //arcView.addEvent(new DecoEvent.Builder(360).setIndex(secondaryArc).setColor(0xFF9E9E9E).setDelay(000).setDuration(500).build());
 
 /*
@@ -128,11 +128,6 @@ public class SpeedoAdapter extends PagerAdapter {
 
         }
 
-        void updatePrimaryArc(int value){
-            arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-            arcView.addEvent(new DecoEvent.Builder(30*360/100).setIndex(value).setColor(colorArrayCorrect[(value/180)]).setDelay(000).setDuration(500).build());
-
-        }
 
 
 
@@ -172,7 +167,7 @@ public class SpeedoAdapter extends PagerAdapter {
 
         View layout = views.get(pos);
         DecoView arcView = (DecoView) layout.findViewById(R.id.dynamicArcView);
-        arcView.addEvent(new DecoEvent.Builder(value).setIndex(series3Index).setColor(colorArrayCorrect[value/121]).setDelay(000).setDuration(200).build());
+        arcView.addEvent(new DecoEvent.Builder(value*360/10000).setIndex(series3Index).setColor(colorArrayCorrect[(value/121)%3]).setDelay(000).setDuration(200).build());
 
 
 

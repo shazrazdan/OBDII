@@ -4,6 +4,7 @@ import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
@@ -24,6 +25,7 @@ import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
 import com.github.pires.obd.commands.protocol.TimeoutCommand;
 import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
 import com.github.pires.obd.enums.ObdProtocols;
+import com.github.pires.obd.exceptions.NonNumericResponseException;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
 import java.io.IOException;
@@ -90,23 +92,17 @@ public class FirstActivity extends AppCompatActivity {
                         connectDeviceAsyncTask.SocketConnectedListener(new SocketConnectedListener() {
                             @Override
                             public void onSocketConnectionComplete(BluetoothSocket socket) {
-                                try {
 
-                                    for (int i=0;i<400;i++) {
-                                        sendCommand(socket,"ATrv");
-                                        receiveResult(socket);
-                                    }
+                                //OBDController.sendCommand(socket,"AT SP 0");
 
-
-                                    //new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
-                                    //new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
-                                    //new TimeoutCommand(125).run(socket.getInputStream(), socket.getOutputStream());
-                                    //new SelectProtocolCommand(ObdProtocols.AUTO).run(socket.getInputStream(), socket.getOutputStream());
-                                    //new AmbientAirTemperatureCommand().run(socket.getInputStream(), socket.getOutputStream());
-                                } catch (Exception e) {
-                                    // handle errors
-                                    Log.e(TAG, "Command execution error");
+                                for (int i=0;i<0;i++) {
+                                    speedoAdapter.notifyPrimaryChanged(0,OBDController.sendCommand("010C"));
                                 }
+
+                                OBDController.setSocket(socket);
+                                Intent i = new Intent(FirstActivity.this, AlternateActivity.class);
+                                startActivity(i);
+
                             }
                         });
                     }
@@ -157,36 +153,4 @@ public class FirstActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public void sendCommand(BluetoothSocket socket, String cmd) {
-        try {
-            socket.getOutputStream().write((cmd + "\r").getBytes());
-            socket.getOutputStream().flush();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void receiveResult(BluetoothSocket socket){
-        try{
-            InputStream in = socket.getInputStream();
-            byte b = 0;
-            StringBuilder res = new StringBuilder();
-
-            // read until '>' arrives OR end of stream reached
-            char c;
-            // -1 if the end of the stream is reached
-            while (((b = (byte) in.read()) > -1)) {
-                c = (char) b;
-                if (c == '>') // read until '>' arrives
-                {
-                    break;
-                }
-                res.append(c);
-            }
-            Log.e(TAG,"Output: " + res.toString());
-        }catch (IOException e){
-            e.printStackTrace();
-        }
-    }
-
 }
