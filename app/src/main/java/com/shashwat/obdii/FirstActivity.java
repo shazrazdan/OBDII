@@ -92,15 +92,10 @@ public class FirstActivity extends AppCompatActivity {
                             public void onSocketConnectionComplete(BluetoothSocket socket) {
                                 try {
 
-                                    sendCommand(socket,"ATZ");
-                                    receiveResult(socket);
-                                    sendCommand(socket,"ATRV");
-                                    receiveResult(socket);
-                                    sendCommand(socket,"ATsp0");
-                                    receiveResult(socket);
-                                    sendCommand(socket,"ATsp0");
-                                    receiveResult(socket);
-
+                                    for (int i=0;i<400;i++) {
+                                        sendCommand(socket,"ATrv");
+                                        receiveResult(socket);
+                                    }
 
 
                                     //new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
