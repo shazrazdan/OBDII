@@ -23,7 +23,7 @@ public class HitURL extends AsyncTask<String, String, String> {
 
     String param0;
 
-    HitURL(String s){
+    public HitURL(String s){
         param0 = s;
     }
 

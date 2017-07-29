@@ -24,12 +24,14 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
+import com.shashwat.obdii.Helper.HitURL;
 import com.shashwat.obdii.async.ConnectDeviceAsyncTask;
 import com.shashwat.obdii.Helper.OBDController;
 import com.shashwat.obdii.async.OBDControllerAsync;
 import com.shashwat.obdii.Helper.PagerBullet;
 import com.shashwat.obdii.R;
 import com.shashwat.obdii.adapters.SpeedoAdapter;
+import com.shashwat.obdii.interfaces.OnURLDataFetchCompleteListener;
 import com.shashwat.obdii.interfaces.ProgressUpdateListener;
 import com.shashwat.obdii.interfaces.SocketConnectedListener;
 
@@ -145,7 +147,6 @@ public class FirstActivity extends AppCompatActivity{
                                     @Override
                                     public void onProgressUpdate(int value) {
                                         speedoAdapter.notifyPrimaryChanged(viewPager.getViewPager().getCurrentItem(),value);
-
                                     }
                                 });
 
