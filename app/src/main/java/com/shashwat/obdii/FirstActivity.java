@@ -183,7 +183,7 @@ public class FirstActivity extends AppCompatActivity {
                 }
                 res.append(c);
             }
-            Log.e(TAG,"Output: res" + res.toString());
+            Log.e(TAG,"Output: " + res.toString());
         }catch (IOException e){
             e.printStackTrace();
         }
