@@ -26,6 +26,8 @@ import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 import com.ogaclejapan.smarttablayout.SmartTabLayout;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -57,6 +59,8 @@ public class FirstActivity extends AppCompatActivity {
 
                 BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
                 Set pairedDevices = btAdapter.getBondedDevices();
+                devices.clear();
+                deviceStrs.clear();
                 if (pairedDevices.size() > 0)
                 {
                     for (Iterator iterator = pairedDevices.iterator(); iterator.hasNext(); ) {
@@ -87,11 +91,23 @@ public class FirstActivity extends AppCompatActivity {
                             @Override
                             public void onSocketConnectionComplete(BluetoothSocket socket) {
                                 try {
-                                    new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
-                                    new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
-                                    new TimeoutCommand(125).run(socket.getInputStream(), socket.getOutputStream());
-                                    new SelectProtocolCommand(ObdProtocols.AUTO).run(socket.getInputStream(), socket.getOutputStream());
-                                    new AmbientAirTemperatureCommand().run(socket.getInputStream(), socket.getOutputStream());
+
+                                    sendCommand(socket,"ATZ");
+                                    receiveResult(socket);
+                                    sendCommand(socket,"ATRV");
+                                    receiveResult(socket);
+                                    sendCommand(socket,"ATsp0");
+                                    receiveResult(socket);
+                                    sendCommand(socket,"ATsp0");
+                                    receiveResult(socket);
+
+
+
+                                    //new EchoOffCommand().run(socket.getInputStream(), socket.getOutputStream());
+                                    //new LineFeedOffCommand().run(socket.getInputStream(), socket.getOutputStream());
+                                    //new TimeoutCommand(125).run(socket.getInputStream(), socket.getOutputStream());
+                                    //new SelectProtocolCommand(ObdProtocols.AUTO).run(socket.getInputStream(), socket.getOutputStream());
+                                    //new AmbientAirTemperatureCommand().run(socket.getInputStream(), socket.getOutputStream());
                                 } catch (Exception e) {
                                     // handle errors
                                     Log.e(TAG, "Command execution error");
@@ -146,7 +162,36 @@ public class FirstActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-    public int getItemPosition(Object object) {
-        return POSITION_NONE;
+    public void sendCommand(BluetoothSocket socket, String cmd) {
+        try {
+            socket.getOutputStream().write((cmd + "\r").getBytes());
+            socket.getOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
+
+    public void receiveResult(BluetoothSocket socket){
+        try{
+            InputStream in = socket.getInputStream();
+            byte b = 0;
+            StringBuilder res = new StringBuilder();
+
+            // read until '>' arrives OR end of stream reached
+            char c;
+            // -1 if the end of the stream is reached
+            while (((b = (byte) in.read()) > -1)) {
+                c = (char) b;
+                if (c == '>') // read until '>' arrives
+                {
+                    break;
+                }
+                res.append(c);
+            }
+            Log.e(TAG,"Output: res" + res.toString());
+        }catch (IOException e){
+            e.printStackTrace();
+        }
+    }
+
 }
